@@ -1,32 +1,14 @@
 package org.android.kmpfire.expects
 
 import io.ktor.client.HttpClient
-import io.ktor.client.plugins.HttpTimeout
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.plugins.defaultRequest
-import io.ktor.client.plugins.logging.Logging
-import io.ktor.http.ContentType
-import io.ktor.http.contentType
-import io.ktor.serialization.kotlinx.json.json
-import kotlinx.serialization.json.Json
+import io.ktor.client.engine.darwin.Darwin
+import platform.Foundation.NSProcessInfo
 
-actual val httpClient: HttpClient = HttpClient(Darwin) {
-    install(HttpTimeout){
-        socketTimeoutMillis = 60000
-        requestTimeoutMillis = 60000
-    }
-    defaultRequest {
-        contentType(ContentType.Application.Json)
-    }
-    defaultRequest {
-        contentType(ContentType.Application.Json)
-        url("https://pokeapi.co/api/v2/")
-    }
-    install(ContentNegotiation){
-        json(Json{
-            isLenient = true
-            ignoreUnknownKeys = true
-            explicitNulls = false
-        })
+actual val httpClient: HttpClient = HttpClient(Darwin)
+
+actual object EnvironmentManager {
+    actual fun getBaseUrl(): String {
+       return NSProcessInfo.processInfo.environment["BASE_URL"] as? String?:"https://v2.jokeapi.dev"
+
     }
 }

@@ -5,7 +5,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import org.android.kmpfire.viewmodel.MainViewModel
+import org.android.kmpfire.presentation.viewmodel.MainViewModel
+import org.android.kmpfire.ui.JokeListComposable
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.KoinContext
 import org.koin.compose.viewmodel.koinViewModel
@@ -20,11 +21,11 @@ fun App() {
             val navController = rememberNavController()
             NavHost(
                 navController = navController,
-                startDestination = "PokemonList"
+                startDestination = "JokesList"
             ) {
-                composable("PokemonList") {
-                    val viewModel = koinViewModel<MainViewModel> ()
-                    PokeListComposable(viewModel.uiState, viewModel::onEvent)
+                composable("JokesList") {
+                    val viewModel = koinViewModel<MainViewModel>()
+                    JokeListComposable(viewModel.uiState, viewModel::onEvent)
                 }
             }
         }

@@ -1,4 +1,4 @@
-package org.android.kmpfire.viewmodel
+package org.android.kmpfire.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,22 +9,23 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.android.Response
-import org.android.kmpfire.domain.usecases.PokemonUseCases
-import org.android.kmpfire.presentation.PokeListUiState
-import org.android.kmpfire.presentation.PokeUiEvent
+import org.android.kmpfire.domain.usecases.JokesUseCases
+import org.android.kmpfire.presentation.JokesListUiState
+import org.android.kmpfire.presentation.JokesUiEvent
 
-class MainViewModel(private val pokemonUseCases: PokemonUseCases) : ViewModel() {
-    private val _uiState: MutableStateFlow<PokeListUiState> = MutableStateFlow(PokeListUiState())
+class MainViewModel(private val jokesUseCases: JokesUseCases) : ViewModel() {
+    private val _uiState: MutableStateFlow<JokesListUiState> = MutableStateFlow(JokesListUiState())
     val uiState = _uiState.asStateFlow()
-        .onStart { onEvent(PokeUiEvent.GetPokemonList) }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), PokeListUiState())
+        .onStart { onEvent(JokesUiEvent.GetPokemonList) }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), JokesListUiState())
+
         /*init {
-            onEvent(PokeUiEvent.GetPokemonList)
+            onEvent(JokesUiEvent.GetPokemonList)
         }*/
 
-    fun onEvent(event: PokeUiEvent) {
+    fun onEvent(event: JokesUiEvent) {
         when (event) {
-            is PokeUiEvent.GetPokemonList -> {
+            is JokesUiEvent.GetPokemonList -> {
                 getPokemonList()
             }
         }
@@ -33,7 +34,7 @@ class MainViewModel(private val pokemonUseCases: PokemonUseCases) : ViewModel() 
     private fun getPokemonList() {
         viewModelScope.launch {
 
-            pokemonUseCases.invoke() // Flow<Response<PokemonResponse>>
+            jokesUseCases.invoke() // Flow<Response<PokemonResponse>>
                 .collect { response ->
                     when (response.status) {
                         Response.Status.LOADING -> {
@@ -48,7 +49,7 @@ class MainViewModel(private val pokemonUseCases: PokemonUseCases) : ViewModel() 
                             _uiState.value = _uiState.value.copy(
                                 loading = false,
                                 error = "",
-                                data = response.data?.results ?: emptyList()
+                                data = response.data?.jokes ?: emptyList()
                             )
                         }
 

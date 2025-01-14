@@ -83,6 +83,9 @@ android {
     namespace = "org.android.kmpfire"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
+    buildFeatures {
+        buildConfig = true
+    }
     defaultConfig {
         applicationId = "org.android.kmpfire"
         minSdk = libs.versions.android.minSdk.get().toInt()
@@ -97,7 +100,12 @@ android {
     }
     buildTypes {
         getByName("release") {
+            isMinifyEnabled = true
+            buildConfigField("String", "BASE_URL", "\"https://v2.jokeapi.dev\"")
+        }
+        getByName("debug") {
             isMinifyEnabled = false
+            buildConfigField("String", "BASE_URL", "\"https://v2.jokeapi.dev\"")
         }
     }
     compileOptions {

@@ -1,4 +1,4 @@
-package org.android.kmpfire
+package org.android.kmpfire.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,12 +16,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.flow.StateFlow
-import org.android.kmpfire.presentation.PokeListUiState
-import org.android.kmpfire.presentation.PokeUiEvent
+import org.android.kmpfire.presentation.JokesListUiState
+import org.android.kmpfire.presentation.JokesUiEvent
 
 
 @Composable
-fun PokeListComposable(uiState: StateFlow<PokeListUiState>, onEvent: (PokeUiEvent) -> Unit) {
+fun JokeListComposable(uiState: StateFlow<JokesListUiState>, onEvent: (JokesUiEvent) -> Unit) {
     val composeState = uiState.collectAsState()
 
     if (composeState.value.loading) {
@@ -47,7 +47,7 @@ fun PokeListComposable(uiState: StateFlow<PokeListUiState>, onEvent: (PokeUiEven
                     modifier = Modifier.fillMaxWidth().wrapContentHeight().padding(20.dp),
                     horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.Top
                 ) {
-                    Text(text = composeState.value.data[it].name)
+                    Text(text = composeState.value.data[it].joke?:"No joke found")
                 }
             }
         }
